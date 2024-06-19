@@ -1,4 +1,6 @@
-import { resolve } from 'node:path';
+import { resolve, dirname } from 'node:path';
+
+const thisDir = dirname(new URL(import.meta.url).pathname);
 
 /** @type {import('@rspack/cli').Configuration} */
 export default {
@@ -6,7 +8,7 @@ export default {
     main: './lib/index.css'
   },
   output: {
-    path: resolve(__dirname, '..', 'public', 'assets')
+    path: resolve(thisDir, '..', 'public', 'assets')
   },
   module: {
     rules: [
