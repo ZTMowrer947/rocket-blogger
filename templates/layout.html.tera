@@ -11,6 +11,7 @@
       {% endblock title %}
     </title>
     {% block styles %}
+      <link rel="stylesheet" href="/public/assets/main.css" />
     {% endblock styles %}
   </head>
   <body>
