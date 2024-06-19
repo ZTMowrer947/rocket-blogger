@@ -1,4 +1,9 @@
 {
   "name": "rocket-blogger",
-  "packageManager": "yarn@4.3.0"
+  "packageManager": "yarn@4.3.0",
+  "devDependencies": {
+    "@rspack/cli": "^0.7.4",
+    "@rspack/core": "^0.7.4"
+  },
+  "type": "module"
 }
