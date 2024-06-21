@@ -79,6 +79,11 @@ impl Fairing for StrictCsp {
     }
 
     async fn on_response<'r>(&self, request: &'r Request<'_>, response: &mut Response<'r>) {
+        // Do not operate in debug mode
+        if cfg!(debug_assertions) {
+            return
+        }
+        
         // Do not operate on failed or non-HTML responses
         if response.status() != Status::Ok || response.content_type() != Some(ContentType::HTML) {
             return
