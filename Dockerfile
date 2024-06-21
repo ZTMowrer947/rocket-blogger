@@ -28,22 +28,46 @@ RUN pnpm gulp copyFiles
 
 FROM rust:${RUST_VERSION}-bookworm AS backend-build
 
+# Copy templates and migrations over to final dir
 WORKDIR /build
 
-# Install Diesel CLI and copy executable
-RUN cargo install cargo-binstall
-RUN cargo binstall -y diesel_cli
-RUN objcopy --compress-debug-sections /usr/local/cargo/bin/diesel ./diesel
+COPY templates templates
+COPY migrations migrations
+
+# Set new workdir (executable will expect files in this workdir in final image)
+WORKDIR /app
 
 # Copy project files
 COPY . .
 
 # Build project into lone executable
-RUN --mount=type=cache,target=/build/target \
+RUN --mount=type=cache,target=/app/target \
     --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=/usr/local/cargo/git \
     <<EOF
     set -eux
     cargo build --release
-    objcopy --compress-debug-sections target/release/rocket-blogger ./main
+    objcopy --compress-debug-sections target/release/rocket-blogger /build/main
 EOF
+
+FROM debian:bookworm
+
+# Install packages and Diesel CLI
+RUN apt update
+RUN apt install -y libpq-dev xz-utils curl
+RUN curl --proto '=https' --tlsv1.2 -LsSf https://github.com/diesel-rs/diesel/releases/download/v2.2.1/diesel_cli-installer.sh | sh
+
+WORKDIR /app
+# Copy required assets from builds
+COPY templates templates
+COPY --from=frontend-build /febuild/public public
+COPY --from=frontend-build /febuild/templates/generated templates/generated
+COPY --from=backend-build /build/main ./
+COPY --from=backend-build /build/migrations migrations
+
+# Configure Rocket to be correctly exposed outside of container
+ENV ROCKET_ADDRESS=0.0.0.0
+ENV ROCKET_PORT=8080
+
+# Run migrations and start server
+CMD ~/.cargo/bin/diesel migration run && ./main
