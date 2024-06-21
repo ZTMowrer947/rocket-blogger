@@ -1,0 +1,6 @@
+{
+  "name": "rocket-blogger",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@9.4.0"
+}
