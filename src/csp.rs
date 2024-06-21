@@ -1,7 +1,9 @@
+use std::fs::read_to_string;
+use std::path::Path;
+
 use base64::prelude::*;
 use rand::prelude::*;
-use rocket::serde::{Deserialize, Serialize};
-
+use rocket::{fs::relative, request::{self, FromRequest}, serde::{Deserialize, Serialize}, Request};
 
 #[derive(Deserialize)]
 #[serde(crate = "rocket::serde")]
@@ -37,5 +39,21 @@ impl From<AssetCounts> for NonceContext {
                 .map(|_| generate_nonce())
                 .collect(),
         }
+    }
+}
+
+#[rocket::async_trait]
+impl<'r> FromRequest<'r> for &'r NonceContext {
+    type Error = ();
+
+    async fn from_request(request: &'r Request<'_>) -> request::Outcome<Self, Self::Error> {
+        let path = Path::new(relative!("templates/generated/asset_counts.json"));
+
+        request::Outcome::Success(request.local_cache(|| {
+            let asset_count_str = read_to_string(&path).unwrap();
+            let asset_counts: AssetCounts = serde_json::from_str(&asset_count_str).unwrap();
+
+            NonceContext::from(asset_counts)
+        }))
     }
 }
