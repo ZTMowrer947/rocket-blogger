@@ -3,6 +3,7 @@ use rocket::fs::FileServer;
 use rocket_dyn_templates::{context, Template};
 
 pub(crate) mod schema;
+pub(crate) mod models;
 
 #[get("/")]
 fn index() -> Template {
