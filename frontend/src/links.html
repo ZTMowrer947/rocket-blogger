@@ -2,6 +2,10 @@
   <link
     rel="stylesheet"
     href="<%= htmlWebpackPlugin.files.css[css] %>"
-    nonce="{{ style_nonces.<%= htmlWebpackPlugin.files.css[css].replace('.css', '').replace('.', '_') %> }}"
+    nonce="{{ style_nonces.<%=
+      htmlWebpackPlugin.files.css[css]
+        .replace(/^\/(\w+\/)+/, '')
+        .replace('.css', '')
+        .replace('.', '_') %> }}"
   />
 <% } %>

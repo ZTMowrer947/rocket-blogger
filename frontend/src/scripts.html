@@ -1,8 +1,13 @@
 <% for (let js in htmlWebpackPlugin.files.js) { %>
-    <script
-        type="module"
-        src="<%= htmlWebpackPlugin.files.js[js] %>"
-        nonce="{{ script_nonces.<%= htmlWebpackPlugin.files.js[js].replace('.js', '').replace('.', '_') %> }}">
-    </script>
+  <script
+    type="module"
+    src="<%= htmlWebpackPlugin.files.js[js] %>"
+    nonce="{{ script_nonces.<%=
+      htmlWebpackPlugin.files.js[js]
+        .replace(/^\/(\w+\/)+/, '')
+        .replace('.js', '')
+        .replace('.', '_')
+      %> }}">
+  </script>
   <% } %>
   
