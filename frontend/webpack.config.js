@@ -9,11 +9,11 @@ const config = {
   experiments: {
     outputModule: true,
   },
-  devtool: isProduction ? false : 'eval',
+  devtool: isProduction ? false : 'eval-source-map',
   output: {
     module: true,
     path: resolve('dist'),
-    filename: '[name].[contenthash].js'
+    filename: isProduction ? '[name].[contenthash].js' : '[name].bundle.js',
   }
 };
 
