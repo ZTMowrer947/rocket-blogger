@@ -7,6 +7,7 @@ pub(crate) mod schema;
 pub(crate) mod models;
 pub(crate) mod routes;
 pub(crate) mod db;
+pub(crate) mod csp;
 
 #[launch]
 fn rocket() -> _ {
