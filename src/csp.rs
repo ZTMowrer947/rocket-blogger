@@ -102,7 +102,7 @@ impl Fairing for StrictCsp {
                 policy.push_str(format!("'nonce-{nonce}' ").as_str())
             }
 
-            policy.push_str("'strict-dynamic' https:;");
+            policy.push(';');
         }
 
         // Add nonces for styles if any
