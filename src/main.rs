@@ -1,5 +1,5 @@
 #[macro_use] extern crate rocket;
-use rocket::fs::FileServer;
+use rocket::fs::{FileServer, relative};
 use rocket_dyn_templates::Template;
 
 pub(crate) mod schema;
@@ -11,6 +11,6 @@ pub(crate) mod db;
 fn rocket() -> _ {
     rocket::build()
         .attach(Template::fairing())
-        .mount("/public", FileServer::from("../public"))
+        .mount("/public", FileServer::from(relative!("public")))
         .mount("/", routes::prelude::all_routes())
 }
