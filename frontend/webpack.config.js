@@ -5,6 +5,7 @@ import { browserslistToTargets } from 'lightningcss';
 import browserslist from 'browserslist';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -45,6 +46,31 @@ const config = {
       template: resolve('src', 'scripts.html'),
       filename: 'scripts.html.tera',
       inject: false,
+    }),
+    // Count generate scripts and styles
+    new WebpackManifestPlugin({
+      fileName: 'asset_counts.json',
+      filter(file) {
+        return !file.isAsset && !file.name.includes('html');
+      },
+      generate(_seed, files) {
+        return files.reduce((acc, file) => {
+          const newAcc = {
+            ...acc,
+          };
+
+          if (file.name.endsWith('js')) {
+            newAcc.script_count++;
+          } else if (file.name.endsWith('css')) {
+            newAcc.style_count++;
+          }
+
+          return newAcc;
+        }, {
+          script_count: 0,
+          style_count: 0,
+        });
+      }
     })
   ]
 };
