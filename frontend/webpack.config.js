@@ -19,6 +19,7 @@ const config = {
   output: {
     module: true,
     path: resolve('dist'),
+    publicPath: '/public/assets',
     filename: isProduction ? '[name].[contenthash].js' : '[name].bundle.js',
   },
   module: {
