@@ -25,3 +25,25 @@ WORKDIR /febuild/frontend
 COPY frontend .
 RUN pnpm build
 RUN pnpm gulp copyFiles
+
+FROM rust:${RUST_VERSION}-bookworm AS backend-build
+
+WORKDIR /build
+
+# Install Diesel CLI and copy executable
+RUN cargo install cargo-binstall
+RUN cargo binstall -y diesel_cli
+RUN objcopy --compress-debug-sections /usr/local/cargo/bin/diesel ./diesel
+
+# Copy project files
+COPY . .
+
+# Build project into lone executable
+RUN --mount=type=cache,target=/build/target \
+    --mount=type=cache,target=/usr/local/cargo/registry \
+    --mount=type=cache,target=/usr/local/cargo/git \
+    <<EOF
+    set -eux
+    cargo build --release
+    objcopy --compress-debug-sections target/release/rocket-blogger ./main
+EOF
