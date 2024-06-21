@@ -2,6 +2,8 @@
 use rocket::fs::FileServer;
 use rocket_dyn_templates::{context, Template};
 
+pub(crate) mod schema;
+
 #[get("/")]
 fn index() -> Template {
     Template::render("index", context! {})
