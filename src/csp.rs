@@ -3,8 +3,16 @@ use std::path::Path;
 
 use base64::prelude::*;
 use rand::prelude::*;
-use rocket::{fs::relative, request::{self, FromRequest}, serde::{Deserialize, Serialize}, Request};
+use rocket::{
+    fairing::{Fairing, Info, Kind},
+    fs::relative, http::{ContentType, Status},
+    request::{self, FromRequest},
+    serde::{Deserialize, Serialize},
+    Request,
+    Response
+};
 
+// Structs for asset nonces
 #[derive(Deserialize)]
 #[serde(crate = "rocket::serde")]
 pub struct AssetCounts {
@@ -19,12 +27,13 @@ pub struct NonceContext {
     pub style_nonces: Vec<String>,
 }
 
+// Nonce generation helpers
 fn generate_nonce() -> String {
     let mut rng = thread_rng();
     let mut nonce_bytes = [0u8; 64];
     rng.fill_bytes(&mut nonce_bytes);
 
-    BASE64_STANDARD.encode(nonce_bytes)
+    BASE64_URL_SAFE.encode(nonce_bytes)
 }
 
 impl From<AssetCounts> for NonceContext {
@@ -55,5 +64,56 @@ impl<'r> FromRequest<'r> for &'r NonceContext {
 
             NonceContext::from(asset_counts)
         }))
+    }
+}
+
+pub struct StrictCsp;
+
+#[rocket::async_trait]
+impl Fairing for StrictCsp {
+    fn info(&self) -> Info {
+        Info {
+            name: "Strict Content Security Policy Manager",
+            kind: Kind::Response
+        }
+    }
+
+    async fn on_response<'r>(&self, request: &'r Request<'_>, response: &mut Response<'r>) {
+        // Do not operate on failed or non-HTML responses
+        if response.status() != Status::Ok || response.content_type() != Some(ContentType::HTML) {
+            return
+        }
+
+        let nonces = request.guard::<&NonceContext>().await.unwrap();
+
+        // Construct CSP policy
+        let mut policy = String::from("default-src 'none'; script-src ");
+
+        // Add nonces for scripts if any
+        if nonces.script_nonces.len() == 0 {
+            policy.push_str("'none';")
+        } else {
+            for nonce in &nonces.script_nonces {
+                policy.push_str(format!("'nonce-{nonce}' ").as_str())
+            }
+
+            policy.push_str("'strict-dynamic' https:;");
+        }
+
+        // Add nonces for styles if any
+        policy.push_str("style-src ");
+
+        if nonces.style_nonces.len() == 0 {
+            policy.push_str("'none'")
+        } else {
+            for nonce in &nonces.style_nonces {
+                policy.push_str(format!("'nonce-{nonce}' ").as_str())
+            }
+
+            policy.push_str("'strict-dynamic' https:;");
+        }
+
+        // Attach CSP header to response
+        response.set_raw_header("Content-Security-Policy", policy);
     }
 }
