@@ -2,5 +2,10 @@
   "name": "rocket-blogger",
   "private": true,
   "type": "module",
-  "packageManager": "pnpm@9.4.0"
+  "packageManager": "pnpm@9.4.0",
+  "devDependencies": {
+    "@types/webpack": "^5.28.5",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4"
+  }
 }
