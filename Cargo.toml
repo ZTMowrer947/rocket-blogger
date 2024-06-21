@@ -12,9 +12,9 @@ version = "0.2.0"
 features = ["tera"]
 
 [dependencies.diesel]
-version = "2.2.1"
+version = "~2.1.6"
 features = ["postgres"]
 
 [dependencies.rocket_db_pools]
 version = "0.2.0"
-features = ["diesel"]
+features = ["diesel_postgres"]
