@@ -10,16 +10,13 @@
         Rocket Blogger
       {% endblock title %}
     </title>
-    {% block styles %}
-      <link rel="stylesheet" href="/public/assets/main.css" />
-    {% endblock styles %}
+    {% include "generated/links" ignore missing %}
   </head>
   <body class="min-h-screen w-full">
     <div id="content">
       {% block content %}
       {% endblock content %}
     </div>
-    {% block scripts %}
-    {% endblock scripts %}
+    {% include "generated/scripts" ignore missing %}
   </body>
 </html>
