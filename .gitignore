@@ -15,4 +15,5 @@ target/
 
 # Frontend outputs
 public/assets/
+templates/generated/
 .env
