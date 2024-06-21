@@ -5,7 +5,12 @@
   "packageManager": "pnpm@9.4.0",
   "devDependencies": {
     "@types/webpack": "^5.28.5",
+    "cross-env": "^7.0.3",
     "webpack": "^5.92.1",
     "webpack-cli": "^5.1.4"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack",
+    "watch": "webpack -w"
   }
 }
