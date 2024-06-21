@@ -10,8 +10,13 @@ function templates() {
     .pipe(dest('../templates/generated'))
 }
 
+function manifest() {
+  return src('dist/asset_counts.json')
+    .pipe(dest('../templates/generated'))
+}
+
 export function copyFiles(cb) {
-  return series(assets, templates)(cb)
+  return series(assets, manifest, templates)(cb)
 }
 
 export function watchCopy() {
