@@ -1,0 +1,8 @@
+<% for (let js in htmlWebpackPlugin.files.js) { %>
+    <script
+        type="module"
+        src="/public/assets/<%= htmlWebpackPlugin.files.js[js] %>"
+        nonce="{{ script_nonces.<%= htmlWebpackPlugin.files.js[js].replace('.js', '').replace('.', '_') %> }}">
+    </script>
+  <% } %>
+  

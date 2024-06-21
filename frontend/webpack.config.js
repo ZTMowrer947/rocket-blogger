@@ -1,8 +1,9 @@
-import { resolve } from 'node:path';
+import { join, resolve } from 'node:path';
 
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import { browserslistToTargets } from 'lightningcss';
 import browserslist from 'browserslist';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -32,7 +33,18 @@ const config = {
       }
     ]
   },
-  plugins: []
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: resolve('src', 'links.html'),
+      filename: 'links.html.tera',
+      inject: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: resolve('src', 'scripts.html'),
+      filename: 'scripts.html.tera',
+      inject: false,
+    })
+  ]
 };
 
 export default () => {

@@ -1,0 +1,7 @@
+<% for (let css in htmlWebpackPlugin.files.css) { %>
+  <link
+    rel="stylesheet"
+    href="/public/assets/<%= htmlWebpackPlugin.files.css[css] %>"
+    nonce="{{ style_nonces.<%= htmlWebpackPlugin.files.css[css].replace('.css', '').replace('.', '_') %> }}"
+  />
+<% } %>
