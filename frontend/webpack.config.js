@@ -1,5 +1,8 @@
 import { resolve } from 'node:path';
 
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
+import { browserslistToTargets } from 'lightningcss';
+import browserslist from 'browserslist';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const isProduction = process.env.NODE_ENV === 'production';
@@ -37,6 +40,19 @@ export default () => {
     config.plugins.push(new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css'
     }));
+
+    config.optimization = {
+      minimize: true,
+      minimizer: [
+        new CssMinimizerPlugin({
+          minify: CssMinimizerPlugin.lightningCssMinify,
+          minimizerOptions: {
+            targets: browserslistToTargets(browserslist('>= 0.25%'))
+          }
+        }),
+        '...',
+      ]
+    }
   }
 
   return config;
