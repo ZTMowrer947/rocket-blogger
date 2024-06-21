@@ -5,6 +5,7 @@ use rocket_dyn_templates::Template;
 pub(crate) mod schema;
 pub(crate) mod models;
 pub(crate) mod routes;
+pub(crate) mod db;
 
 #[launch]
 fn rocket() -> _ {
