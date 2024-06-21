@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    '../templates/**/*.{html.tera}'
+    '../templates/**/*.html.tera'
   ],
   theme: {
     extend: {},
