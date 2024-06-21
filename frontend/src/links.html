@@ -1,11 +1,7 @@
-<% for (let css in htmlWebpackPlugin.files.css) { %>
+<% htmlWebpackPlugin.files.css.forEach((css, index) => { %>
   <link
     rel="stylesheet"
-    href="<%= htmlWebpackPlugin.files.css[css] %>"
-    nonce="{{ style_nonces.<%=
-      htmlWebpackPlugin.files.css[css]
-        .replace(/^\/(\w+\/)+/, '')
-        .replace('.css', '')
-        .replace('.', '_') %> }}"
+    href="<%= css %>"
+    nonce="{{ style_nonces[<%= index %>] }}"
   />
-<% } %>
+<% }) %>
