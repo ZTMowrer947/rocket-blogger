@@ -1,5 +1,5 @@
 {% extends "layout" %}
 
 {% block content %}
-<a href="/new-post">+ Create New Post</a>
+<h1>This is where a post creation form goes</h1>
 {% endblock content %}
