@@ -18,4 +18,4 @@ services:
       - 8080:8080/tcp
     environment:
       DATABASE_URL: postgres://postgres:pass1234@db:5432/rocket-blogger
-      ROCKET_DATABASES: "{rocket-blogger={url=\"$DATABASE_URL\"}}"
+      ROCKET_DATABASES: "{rocket-blogger={url=\"postgres://postgres:pass1234@db:5432/rocket-blogger\"}}"
