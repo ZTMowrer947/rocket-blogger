@@ -1,8 +1,6 @@
 {% extends "layout" %}
 
 {% block content %}
-<h1>This is where a post creation form goes</h1>
-
 <form action="/new-post" method="post">
   <div>
     <label for="title">Title</label>
