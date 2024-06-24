@@ -27,7 +27,7 @@
     "webpack-stream": "^7.0.0"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
-    "watch": "webpack -w"
+    "build": "cross-env NODE_ENV=production gulp buildAndCopy",
+    "watch": "gulp dev"
   }
 }
