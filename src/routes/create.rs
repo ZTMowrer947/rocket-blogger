@@ -2,7 +2,7 @@ use diesel::Insertable;
 use rocket::form::{Contextual, Form, FromForm};
 use rocket::response::Redirect;
 use rocket_db_pools::{Connection, diesel::insert_into};
-use rocket_dyn_templates::Template;
+use rocket_dyn_templates::{context, Template};
 
 use crate::db::Blogger;
 use crate::{csp::NonceContext, schema::posts};
@@ -20,7 +20,7 @@ pub struct PostInput<'r> {
 
 #[get("/new-post")]
 pub fn new_post_form(nonces: &NonceContext) -> Template {
-    Template::render("new", nonces)
+    Template::render("new", context! { nonces })
 }
 
 #[post("/new-post", data = "<input>")]
@@ -45,6 +45,6 @@ pub async fn new_post(
         println!("Validation context: {:?}", input.context);
 
         // TODO: Pass validation errors back to form
-        Err(Template::render("new", nonces))
+        Err(Template::render("new", context! { nonces }))
     }
 }

@@ -1,16 +1,7 @@
-use rocket::serde::Serialize;
 use rocket_db_pools::{Connection,diesel::prelude::*};
-use rocket_dyn_templates::Template;
+use rocket_dyn_templates::{context, Template};
 
 use crate::{csp::NonceContext, db::Blogger, models::post::Post};
-
-#[derive(Serialize)]
-#[serde(crate = "rocket::serde")]
-struct RootContext<'a> {
-    #[serde(flatten)]
-    nonces: &'a NonceContext,
-    posts: Vec<Post>,
-}
 
 #[get("/")]
 pub async fn index(mut db: Connection<Blogger>, nonces: &NonceContext) -> Template {
@@ -24,7 +15,7 @@ pub async fn index(mut db: Connection<Blogger>, nonces: &NonceContext) -> Templa
         .expect("Could not retrieve posts from ");
 
     // Render page with nonces in context
-    Template::render("index", RootContext {
+    Template::render("index", context! {
         nonces,
         posts: post_entries
     })

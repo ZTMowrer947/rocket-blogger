@@ -23,8 +23,8 @@ pub struct AssetCounts {
 #[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
 pub struct NonceContext {
-    pub script_nonces: Vec<String>,
-    pub style_nonces: Vec<String>,
+    pub scripts: Vec<String>,
+    pub styles: Vec<String>,
 }
 
 // Nonce generation helpers
@@ -41,10 +41,10 @@ impl From<AssetCounts> for NonceContext {
         let AssetCounts { script_count, style_count } = asset_counts;
 
         Self {
-            script_nonces: (0..script_count)
+            scripts: (0..script_count)
                 .map(|_| generate_nonce())
                 .collect(),
-            style_nonces: (0..style_count)
+            styles: (0..style_count)
                 .map(|_| generate_nonce())
                 .collect(),
         }
@@ -95,10 +95,10 @@ impl Fairing for StrictCsp {
         let mut policy = String::from("default-src 'none'; script-src ");
 
         // Add nonces for scripts if any
-        if nonces.script_nonces.len() == 0 {
+        if nonces.scripts.len() == 0 {
             policy.push_str("'none';")
         } else {
-            for nonce in &nonces.script_nonces {
+            for nonce in &nonces.scripts {
                 policy.push_str(format!("'nonce-{nonce}' ").as_str())
             }
 
@@ -108,10 +108,10 @@ impl Fairing for StrictCsp {
         // Add nonces for styles if any
         policy.push_str("style-src ");
 
-        if nonces.style_nonces.len() == 0 {
+        if nonces.styles.len() == 0 {
             policy.push_str("'none'")
         } else {
-            for nonce in &nonces.style_nonces {
+            for nonce in &nonces.styles {
                 policy.push_str(format!("'nonce-{nonce}' ").as_str())
             }
 
