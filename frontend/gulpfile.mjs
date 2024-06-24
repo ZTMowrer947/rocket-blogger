@@ -1,5 +1,20 @@
 import { src, dest, series, watch } from 'gulp';
+import webpackStream from 'webpack-stream';
+import webpack from 'webpack';
+import webpackConfig from './webpack.config.js';
 
+function build() {
+  // Extract webpack config object
+  const config = typeof webpackConfig === 'function' ?
+    webpackConfig() :
+    webpackConfig;
+
+  return src('src/index.js')
+    .pipe(webpackStream(config, webpack))
+    .pipe(dest('dist/'))
+}
+
+// Post-build functions
 function assets() {
   return src(['dist/*.js', 'dist/*.css'])
     .pipe(dest('../public/assets'))
@@ -15,12 +30,17 @@ function manifest() {
     .pipe(dest('../templates/generated'))
 }
 
-export function copyFiles(cb) {
+function copyFiles(cb) {
   return series(assets, manifest, templates)(cb)
 }
 
-export function watchCopy() {
-  return watch('dist/*', copyFiles)
+// Build with webpack and copy assets to correct locations
+export function buildAndCopy(cb) {
+  return series(build, copyFiles)(cb);
 }
 
-export default watchCopy;
+export function dev() {
+  return watch(['src/*', '../templates/*.html.tera'], buildAndCopy)
+}
+
+export default dev;
