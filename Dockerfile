@@ -24,7 +24,6 @@ WORKDIR /febuild/frontend
 # Build assets and place in correct location
 COPY frontend .
 RUN pnpm build
-RUN pnpm gulp copyFiles
 
 FROM rust:${RUST_VERSION}-bookworm AS backend-build
 
