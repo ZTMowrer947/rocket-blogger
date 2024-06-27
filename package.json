@@ -5,7 +5,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "styles": "tailwindcss -i ./src/tailwind.css -o ./public/assets/styles.css --minify",
+    "styles:watch": "tailwindcss -i ./src/tailwind.css -o ./public/assets/styles.css --watch"
   },
   "repository": {
     "type": "git",
