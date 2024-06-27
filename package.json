@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/ZTMowrer947/rocket-blogger/issues"
   },
-  "homepage": "https://github.com/ZTMowrer947/rocket-blogger#readme"
+  "homepage": "https://github.com/ZTMowrer947/rocket-blogger#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.4"
+  }
 }
