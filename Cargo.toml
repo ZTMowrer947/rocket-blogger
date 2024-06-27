@@ -6,8 +6,6 @@ edition = "2021"
 [dependencies]
 rocket = "0.5.1"
 dotenvy = "0.15"
-rand = "0.8.5"
-base64 = "0.22.1"
 serde_json = "1.0.117"
 
 [dependencies.rocket_dyn_templates]
