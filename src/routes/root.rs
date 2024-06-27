@@ -1,14 +1,14 @@
 use rocket_db_pools::{Connection,diesel::prelude::*};
 use rocket_dyn_templates::{context, Template};
 
-use crate::{csp::NonceContext, db::Blogger, models::post::Post};
+use crate::{db::Blogger, models::post::Post};
 
 #[get("/")]
-pub async fn index(mut db: Connection<Blogger>, nonces: &NonceContext) -> Template {
+pub async fn index(mut db: Connection<Blogger>) -> Template {
     use crate::schema::posts::dsl::*;
 
     // Fetch list of posts
-    let post_entries = posts
+    let post_list = posts
         .select(Post::as_select())
         .load(&mut db)
         .await
@@ -16,7 +16,6 @@ pub async fn index(mut db: Connection<Blogger>, nonces: &NonceContext) -> Templa
 
     // Render page with nonces in context
     Template::render("index", context! {
-        nonces,
-        posts: post_entries
+        posts: post_list
     })
 }

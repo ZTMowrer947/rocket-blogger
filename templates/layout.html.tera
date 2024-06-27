@@ -10,13 +10,11 @@
         Rocket Blogger
       {% endblock title %}
     </title>
-    {% include "generated/links" ignore missing %}
   </head>
   <body class="min-h-screen w-full">
     <div id="content">
       {% block content %}
       {% endblock content %}
     </div>
-    {% include "generated/scripts" ignore missing %}
   </body>
 </html>

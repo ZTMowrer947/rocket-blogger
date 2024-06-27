@@ -5,7 +5,7 @@ use rocket_db_pools::{Connection, diesel::insert_into};
 use rocket_dyn_templates::{context, Template};
 
 use crate::db::Blogger;
-use crate::{csp::NonceContext, schema::posts};
+use crate::schema::posts;
 use crate::models::post::Post;
 
 // Form data for creating a new post
@@ -19,14 +19,13 @@ pub struct PostInput<'r> {
 }
 
 #[get("/new-post")]
-pub fn new_post_form(nonces: &NonceContext) -> Template {
-    Template::render("new", context! { nonces })
+pub fn new_post_form() -> Template {
+    Template::render("new", context! {})
 }
 
 #[post("/new-post", data = "<input>")]
 pub async fn new_post(
     mut db: Connection<Blogger>,
-    nonces: &NonceContext,
     input: Form<Contextual<PostInput<'_>, '_>>) -> Result<Redirect, Template> {
     // Parse form
     if let Some(ref post_data) = input.value {
@@ -45,6 +44,6 @@ pub async fn new_post(
         println!("Validation context: {:?}", input.context);
 
         // TODO: Pass validation errors back to form
-        Err(Template::render("new", context! { nonces }))
+        Err(Template::render("new", context! {}))
     }
 }
