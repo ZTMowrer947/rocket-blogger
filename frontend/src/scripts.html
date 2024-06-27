@@ -1,7 +1,0 @@
-<% htmlWebpackPlugin.files.js.forEach((js, index) => { %>
-  <script
-    type="module"
-    src="<%= js %>"
-    nonce="{{ nonces.scripts[<%= index %>] }}">
-  </script>
-<% }) %>

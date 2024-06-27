@@ -17,3 +17,4 @@ target/
 public/assets/
 templates/generated/
 .env
+node_modules/

@@ -1,7 +1,0 @@
-<% htmlWebpackPlugin.files.css.forEach((css, index) => { %>
-  <link
-    rel="stylesheet"
-    href="<%= css %>"
-    nonce="{{ nonces.styles[<%= index %>] }}"
-  />
-<% }) %>
