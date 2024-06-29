@@ -1,6 +1,4 @@
-{% extends "layout" %}
-
-{% block content %}
+{{#*inline "content"}}
 <form action="/new-post" method="post">
   <div>
     <label for="title">Title</label>
@@ -15,4 +13,5 @@
     <a href="/">Cancel</a>
   </div>
 </form>
-{% endblock content %}
+{{/inline}}
+{{> layout}}
